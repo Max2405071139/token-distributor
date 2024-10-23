@@ -188,9 +188,16 @@ export class DistributionProcess {
                 return;
             }
 
-            await this.failBatch(batch, String(e));
-
             logger.error(`Batch# ${batch.id} # send transaction failed: ${e}`);
+            await this.batchManager.completeBatch(batch.id, String(e));
+
+            // Transaction simulation failed: Blockhash not found.
+            if (String(e).includes("simulation") && String(e).includes("Blockhash not found")) {
+                // retry later 
+                await this.batchManager.retryBatch(batch.id);
+                return;
+            }
+
             return;
         }
 
