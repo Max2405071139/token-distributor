@@ -288,6 +288,6 @@ export class DistributionProcess {
 
     async isBlockhashExpired(lastValidBlockHeight: number) {
         let currentBlockHeight = (await this.connection.getBlockHeight('finalized'));
-        return (currentBlockHeight > lastValidBlockHeight - 151);
+        return (currentBlockHeight > lastValidBlockHeight);
     }
 }
